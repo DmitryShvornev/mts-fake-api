@@ -1,5 +1,6 @@
-import Header from "../header/Header";
-import Copyright from '../copyright/Copyright';
+/* eslint-disable react-hooks/exhaustive-deps */
+import Header from "../header/header";
+import Copyright from '../copyright/copyright';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,20 +8,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import UsersStore from "../../stores/users-store/users-store";
+import { useEffect } from "react";
+import { observer, inject } from "mobx-react";
 
-function createData(id: number, name: string, email: string, phone: string, company: string) {
-    return { id, name, email, phone, company };
+type Props = {
+    usersStore: UsersStore,
 }
 
-const rows = [
-    createData(1, "Sara", "sara@gmail.com", "1(234)5678", "Apple"),
-    createData(2, "John", "john@gmail.com", "1(234)5678", "Microsoft"),
-    createData(3, "James", "james@gmail.com", "1(234)5678", "Intel"),
-    createData(4, "Ivan", "ivan@gmail.com", "1(234)5678", "Google"),
-    createData(5, "Dmitry", "dmitry@gmail.com", "1(234)5678", "Yandex"),
-];
-
-export default function Users(): JSX.Element {
+function Users({usersStore}: Props): JSX.Element {
+    const { users, fetchUsersAction } = usersStore;
+    useEffect(() => {
+        fetchUsersAction();
+    }, []);
     return (
         <>
             <Header />
@@ -36,16 +36,16 @@ export default function Users(): JSX.Element {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {users.map((item) => (
                             <TableRow
-                                key={row.id}
+                                key={item.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell component="th" scope="row">{row.id}</TableCell>
-                                <TableCell align="right">{row.name}</TableCell>
-                                <TableCell align="right">{row.email}</TableCell>
-                                <TableCell align="right">{row.phone}</TableCell>
-                                <TableCell align="right">{row.company}</TableCell>
+                                <TableCell component="th" scope="row">{item.id}</TableCell>
+                                <TableCell align="right">{item.name}</TableCell>
+                                <TableCell align="right">{item.email}</TableCell>
+                                <TableCell align="right">{item.phone}</TableCell>
+                                <TableCell align="right">{item.company.name}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -55,3 +55,6 @@ export default function Users(): JSX.Element {
         </>
     );
 }
+
+export { Users }
+export default inject("usersStore")(observer(Users));

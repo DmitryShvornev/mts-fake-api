@@ -1,6 +1,6 @@
 import './App.css';
-import Main from './components/main/Main';
-import Users from './components/users/Users';
+import Main from './components/main/main';
+import Users from './components/users/users';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 function App() : JSX.Element {
