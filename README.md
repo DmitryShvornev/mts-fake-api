@@ -4,5 +4,5 @@
 
 Запуск приложения(клиент и сервер одновременно):
 
-cd project
-npm run start
+1) cd project
+2) npm run start
