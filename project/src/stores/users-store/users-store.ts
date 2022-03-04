@@ -1,6 +1,7 @@
-import { action, observable, runInAction } from 'mobx';
+import { runInAction, makeAutoObservable } from 'mobx';
 import axios from 'axios';
 import RootStore from '../root-store/root-store';
+import { APIRoute } from '../../utils/const';
 
 export interface User {
     id: number,
@@ -29,14 +30,17 @@ export interface User {
 
 class UsersStore {
     rootStore: RootStore;
-    constructor(rootStore: RootStore){
+    users: User[] = [];
+    isDataLoaded: boolean = false;
+    constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
-      }
-    @observable users : User[] = [];
-    @action fetchUsersAction = async() => {
-        const {data} = await axios.get<User[]>("http://localhost:3001/users");
+        makeAutoObservable(this);
+    }
+    async fetchUsersAction () {
+        const { data } = await axios.get<User[]>(APIRoute.Users);
         runInAction(() => {
             this.users = data;
+            this.isDataLoaded = true;
         });
     };
 }

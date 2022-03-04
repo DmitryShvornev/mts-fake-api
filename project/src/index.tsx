@@ -3,21 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Provider} from 'mobx-react';
 import RootStore from './stores/root-store/root-store';
+import {StoresContext} from './stores/root-store/root-store';
 
-const rootStore = new RootStore();
+const globalStore = new RootStore();
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider
-      rootStore={rootStore}
-      usersStore={rootStore.usersStore}
-      postsStore={rootStore.postsStore}
-    >
+    <StoresContext.Provider value={globalStore}>
       <App />
-    </Provider>
+    </StoresContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
